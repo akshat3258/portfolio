@@ -58,26 +58,29 @@ RULES
         setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
         setIsLoading(true);
         try {
-            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+                const response = await fetch(
+                "https://openrouter.ai/api/v1/chat/completions",
+                {
+                    method: "POST",
+                    headers: {
+                    Authorization: `Bearer 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`,
                     "Content-Type": "application/json",
                     "HTTP-Referer": window.location.origin,
-                    "X-Title": "Akshat AI Portfolio",
-                },
-                body: JSON.stringify({
+                    "X-Title": "Akshat AI Portfolio"
+                    },
+                    body: JSON.stringify({
                     model: "openrouter/auto",
                     messages: [
                         { role: "system", content: systemPrompt },
                         ...messages.map((msg) => ({
-                            role: msg.role === "user" ? "user" : "assistant",
-                            content: msg.content,
+                        role: msg.role === "user" ? "user" : "assistant",
+                        content: msg.content
                         })),
-                        { role: "user", content: userMessage },
-                    ],
-                }),
-            });
+                        { role: "user", content: userMessage }
+                    ]
+                    })
+                }
+                );
             if (!response.ok) {
                 throw new Error("API request failed");
             }
