@@ -74,18 +74,22 @@ RULES
         setIsLoading(true);
 
         try {
+                const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+                
+                if (!apiKey) {
+                    throw new Error("OpenAI API key is not configured");
+                }
+
                 const response = await fetch(
-                "https://openrouter.ai/api/v1/chat/completions",
+                "https://api.openai.com/v1/chat/completions",
                 {
                     method: "POST",
                     headers: {
-                    Authorization: `Bearer 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`,
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": window.location.origin,
-                    "X-Title": "Akshat AI Portfolio"
+                    Authorization: `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                    model: "openrouter/auto",
+                    model: "gpt-4-turbo",
                     messages: [
                         { role: "system", content: systemPrompt },
                         ...messages.map((msg) => ({
@@ -93,7 +97,9 @@ RULES
                         content: msg.content
                         })),
                         { role: "user", content: userMessage }
-                    ]
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 500
                     })
                 }
                 );
